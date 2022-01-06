@@ -476,7 +476,6 @@ void RC_Channel::init_aux_function(const aux_func_t ch_option, const AuxSwitchPo
     switch(ch_option) {
     // the following functions do not need to be initialised:
     case AUX_FUNC::ARMDISARM:
-    case AUX_FUNC::CAMERA_TRIGGER:
     case AUX_FUNC::CLEAR_WP:
     case AUX_FUNC::COMPASS_LEARN:
     case AUX_FUNC::DISARM:
@@ -519,6 +518,7 @@ void RC_Channel::init_aux_function(const aux_func_t ch_option, const AuxSwitchPo
     case AUX_FUNC::RUNCAM_OSD_CONTROL:
     case AUX_FUNC::SPRAYER:
     case AUX_FUNC::DISABLE_AIRSPEED_USE:
+    case AUX_FUNC::CAMERA_TRIGGER:
 #if HAL_MOUNT_ENABLED
     case AUX_FUNC::RETRACT_MOUNT:
 #endif
@@ -898,6 +898,7 @@ void RC_Channel::do_aux_function_mission_reset(const AuxSwitchPos ch_flag)
 bool RC_Channel::run_aux_function(aux_func_t ch_option, AuxSwitchPos pos, AuxFuncTriggerSource source)
 {
     const bool ret = do_aux_function(ch_option, pos);
+        gcs().send_text(MAV_SEVERITY_INFO, "valid option(%u)   %d", (unsigned int)ch_option,(int)pos);
 
     // @LoggerMessage: AUXF
     // @Description: Auixillary function invocation information
@@ -926,6 +927,8 @@ bool RC_Channel::do_aux_function(const aux_func_t ch_option, const AuxSwitchPos 
     switch(ch_option) {
     case AUX_FUNC::CAMERA_TRIGGER:
         do_aux_function_camera_trigger(ch_flag);
+                gcs().send_text(MAV_SEVERITY_INFO, "11111(%u)   %d", (unsigned int)ch_option,(int)ch_flag);
+
         break;
 
     case AUX_FUNC::FENCE:

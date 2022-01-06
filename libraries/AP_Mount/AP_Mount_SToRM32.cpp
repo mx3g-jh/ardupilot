@@ -163,18 +163,18 @@ float AP_Mount_SToRM32::caculate_yaw_angle(float yaw_deg)
 {
     yaw_pecent = 0.008*abs(yaw_deg);
 
-    if(yaw_deg <= -55.0f && yaw_deg >= -90.0f)
+    if(yaw_deg <= -15.0f && yaw_deg >= -90.0f)
     {
         yaw_dig -= PUS_STEP*yaw_pecent;
         if(yaw_dig <= -90.0f)yaw_dig = -90.0f;
         last_yaw_channel = yaw_deg;
-    }else if(yaw_deg > -55.0f && yaw_deg < -35.0f)
+    }else if(yaw_deg > -15.0f && yaw_deg < 15.0f)
     {
         last_yaw_channel = yaw_dig;
-    }else if(yaw_deg >= -35.0f && yaw_deg <= 0.0f)
+    }else if(yaw_deg >= 15.0f && yaw_deg <= 90.0f)
     {
         yaw_dig += PUS_STEP*yaw_pecent;
-        if(yaw_dig >= 0.0f)yaw_dig = 0.0f;
+        if(yaw_dig >= 90.0f)yaw_dig = 90.0f;
         last_yaw_channel = yaw_dig;
     }
 
@@ -195,9 +195,7 @@ void AP_Mount_SToRM32::send_do_mount_control(float pitch_deg, float roll_deg, fl
         return;
     }
 
-    // reverse yaw control
-    yaw_deg = -yaw_deg;
-    // caculate_yaw_angle(yaw_deg);
+    float yaw_caculate = caculate_yaw_angle(yaw_deg);
     float pitch_caculate = caculate_pitch_angle(pitch_deg);
     mavlink_msg_command_long_send(_chan,
                                   _sysid,
@@ -206,11 +204,11 @@ void AP_Mount_SToRM32::send_do_mount_control(float pitch_deg, float roll_deg, fl
                                   0,        // confirmation of zero means this is the first time this message has been sent
                                   pitch_caculate,
                                   roll_deg,
-                                  -45,
+                                  yaw_caculate,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   mount_mode);
 
-        gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_caculate,(int)pitch_deg,(int)yaw_deg);
+        // gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_caculate,(int)pitch_deg,(int)yaw_deg);
 
     // store time of send
     _last_send = AP_HAL::millis();

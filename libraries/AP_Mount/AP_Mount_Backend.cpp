@@ -141,6 +141,8 @@ void AP_Mount_Backend::update_targets_from_rc()
             _angle_ef_target_rad.z = angle_input_rad(pan_ch, _state._pan_angle_min, _state._pan_angle_max);
         }
     }
+
+    // gcs().send_text(MAV_SEVERITY_INFO, "rc  %d",tilt_ch->get_radio_in());
 }
 
 // returns the angle (radians) that the RC_Channel input is receiving
