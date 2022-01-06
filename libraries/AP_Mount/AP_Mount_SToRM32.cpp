@@ -137,6 +137,51 @@ void AP_Mount_SToRM32::find_gimbal()
     }
 }
 
+float AP_Mount_SToRM32::caculate_pitch_angle(float pitch_deg)
+{
+    pitch_pecent = 0.008*abs(abs(pitch_deg) - 45.0f);
+
+    if(pitch_deg <= -55.0f && pitch_deg >= -90.0f)
+    {
+        pitch_dig -= PUS_STEP*pitch_pecent;
+        if(pitch_dig <= -90.0f)pitch_dig = -90.0f;
+        last_pitch_channel = pitch_dig;
+    }else if(pitch_deg > -55.0f && pitch_deg < -35.0f)
+    {
+        last_pitch_channel = pitch_dig;
+    }else if(pitch_deg >= -35.0f && pitch_deg <= 0.0f)
+    {
+        pitch_dig += PUS_STEP*pitch_pecent;
+        if(pitch_dig >= 0.0f)pitch_dig = 0.0f;
+        last_pitch_channel = pitch_dig;
+    }
+
+    return last_pitch_channel;
+}
+
+float AP_Mount_SToRM32::caculate_yaw_angle(float yaw_deg)
+{
+    yaw_pecent = 0.008*abs(yaw_deg);
+
+    if(yaw_deg <= -55.0f && yaw_deg >= -90.0f)
+    {
+        yaw_dig -= PUS_STEP*yaw_pecent;
+        if(yaw_dig <= -90.0f)yaw_dig = -90.0f;
+        last_yaw_channel = yaw_deg;
+    }else if(yaw_deg > -55.0f && yaw_deg < -35.0f)
+    {
+        last_yaw_channel = yaw_dig;
+    }else if(yaw_deg >= -35.0f && yaw_deg <= 0.0f)
+    {
+        yaw_dig += PUS_STEP*yaw_pecent;
+        if(yaw_dig >= 0.0f)yaw_dig = 0.0f;
+        last_yaw_channel = yaw_dig;
+    }
+
+    return last_yaw_channel;
+}
+
+
 // send_do_mount_control - send a COMMAND_LONG containing a do_mount_control message
 void AP_Mount_SToRM32::send_do_mount_control(float pitch_deg, float roll_deg, float yaw_deg, enum MAV_MOUNT_MODE mount_mode)
 {
@@ -150,81 +195,22 @@ void AP_Mount_SToRM32::send_do_mount_control(float pitch_deg, float roll_deg, fl
         return;
     }
 
-    // reverse pitch and yaw control
-    pitch_deg = -pitch_deg;
+    // reverse yaw control
     yaw_deg = -yaw_deg;
-
-    // send command_long command containing a do_mount_control command
-
-    // mavlink_msg_command_long_send(MAVLINK_COMM_0,
-    //                               1,
-    //                               154,
-    //                               MAV_CMD_DO_MOUNT_CONFIGURE,
-    //                               0,        // confirmation of zero means this is the first time this message has been sent
-    //                               2,
-    //                               0,
-    //                               0,
-    //                               0, 0, 0,  // param4 ~ param6 unused
-    //                               0);
-
-    //                                   mavlink_msg_command_long_send(MAVLINK_COMM_1,
-    //                               1,
-    //                               154,
-    //                               MAV_CMD_DO_MOUNT_CONFIGURE,
-    //                               0,        // confirmation of zero means this is the first time this message has been sent
-    //                               2,
-    //                               0,
-    //                               0,
-    //                               0, 0, 0,  // param4 ~ param6 unused
-    //                               0);
-
-    //                                   mavlink_msg_command_long_send(MAVLINK_COMM_2,
-    //                               1,
-    //                               154,
-    //                               MAV_CMD_DO_MOUNT_CONFIGURE,
-    //                               0,        // confirmation of zero means this is the first time this message has been sent
-    //                               2,
-    //                               0,
-    //                               0,
-    //                               0, 0, 0,  // param4 ~ param6 unused
-    //                               0);
-
-
+    // caculate_yaw_angle(yaw_deg);
+    float pitch_caculate = caculate_pitch_angle(pitch_deg);
     mavlink_msg_command_long_send(_chan,
                                   _sysid,
                                   _compid,
                                   MAV_CMD_DO_MOUNT_CONTROL,
                                   0,        // confirmation of zero means this is the first time this message has been sent
-                                  -pitch_deg,
+                                  pitch_caculate,
                                   roll_deg,
                                   -45,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   mount_mode);
 
-                                   // send command_long command containing a do_mount_control command
-    // mavlink_msg_command_long_send(MAVLINK_COMM_0,
-    //                               1,
-    //                               154,
-    //                               MAV_CMD_DO_MOUNT_CONTROL,
-    //                               0,        // confirmation of zero means this is the first time this message has been sent
-    //                               pitch_deg,
-    //                               roll_deg,
-    //                               45,
-    //                               0, 0, 0,  // param4 ~ param6 unused
-    //                               mount_mode);
-
-    //                                // send command_long command containing a do_mount_control command
-    // mavlink_msg_command_long_send(MAVLINK_COMM_1,
-    //                               1,
-    //                               154,
-    //                               MAV_CMD_DO_MOUNT_CONTROL,
-    //                               0,        // confirmation of zero means this is the first time this message has been sent
-    //                               pitch_deg,
-    //                               roll_deg,
-    //                               90,
-    //                               0, 0, 0,  // param4 ~ param6 unused
-    //                               mount_mode);
-        gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_deg,(int)roll_deg,(int)yaw_deg);
+        gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_caculate,(int)pitch_deg,(int)yaw_deg);
 
     // store time of send
     _last_send = AP_HAL::millis();
