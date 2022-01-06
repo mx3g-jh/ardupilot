@@ -18,7 +18,6 @@ void AP_Mount_SToRM32::update()
         find_gimbal();
         return;
     }
-
     // flag to trigger sending target angles to gimbal
     bool resend_now = false;
 
@@ -132,7 +131,8 @@ void AP_Mount_SToRM32::find_gimbal()
         return;
     }
 
-    if (GCS_MAVLINK::find_by_mavtype(MAV_TYPE_GIMBAL, _sysid, _compid, _chan)) {
+    if (GCS_MAVLINK::find_by_mavtype(MAV_TYPE_GENERIC, _sysid, _compid, _chan)) {
+    gcs().send_text(MAV_SEVERITY_INFO, "sysid (%d) (%d) (%d)", _sysid,_compid,(int)_chan);
         _initialised = true;
     }
 }
@@ -155,16 +155,76 @@ void AP_Mount_SToRM32::send_do_mount_control(float pitch_deg, float roll_deg, fl
     yaw_deg = -yaw_deg;
 
     // send command_long command containing a do_mount_control command
+
+    // mavlink_msg_command_long_send(MAVLINK_COMM_0,
+    //                               1,
+    //                               154,
+    //                               MAV_CMD_DO_MOUNT_CONFIGURE,
+    //                               0,        // confirmation of zero means this is the first time this message has been sent
+    //                               2,
+    //                               0,
+    //                               0,
+    //                               0, 0, 0,  // param4 ~ param6 unused
+    //                               0);
+
+    //                                   mavlink_msg_command_long_send(MAVLINK_COMM_1,
+    //                               1,
+    //                               154,
+    //                               MAV_CMD_DO_MOUNT_CONFIGURE,
+    //                               0,        // confirmation of zero means this is the first time this message has been sent
+    //                               2,
+    //                               0,
+    //                               0,
+    //                               0, 0, 0,  // param4 ~ param6 unused
+    //                               0);
+
+    //                                   mavlink_msg_command_long_send(MAVLINK_COMM_2,
+    //                               1,
+    //                               154,
+    //                               MAV_CMD_DO_MOUNT_CONFIGURE,
+    //                               0,        // confirmation of zero means this is the first time this message has been sent
+    //                               2,
+    //                               0,
+    //                               0,
+    //                               0, 0, 0,  // param4 ~ param6 unused
+    //                               0);
+
+
     mavlink_msg_command_long_send(_chan,
                                   _sysid,
                                   _compid,
                                   MAV_CMD_DO_MOUNT_CONTROL,
                                   0,        // confirmation of zero means this is the first time this message has been sent
-                                  pitch_deg,
+                                  -pitch_deg,
                                   roll_deg,
-                                  yaw_deg,
+                                  -45,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   mount_mode);
+
+                                   // send command_long command containing a do_mount_control command
+    // mavlink_msg_command_long_send(MAVLINK_COMM_0,
+    //                               1,
+    //                               154,
+    //                               MAV_CMD_DO_MOUNT_CONTROL,
+    //                               0,        // confirmation of zero means this is the first time this message has been sent
+    //                               pitch_deg,
+    //                               roll_deg,
+    //                               45,
+    //                               0, 0, 0,  // param4 ~ param6 unused
+    //                               mount_mode);
+
+    //                                // send command_long command containing a do_mount_control command
+    // mavlink_msg_command_long_send(MAVLINK_COMM_1,
+    //                               1,
+    //                               154,
+    //                               MAV_CMD_DO_MOUNT_CONTROL,
+    //                               0,        // confirmation of zero means this is the first time this message has been sent
+    //                               pitch_deg,
+    //                               roll_deg,
+    //                               90,
+    //                               0, 0, 0,  // param4 ~ param6 unused
+    //                               mount_mode);
+        gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_deg,(int)roll_deg,(int)yaw_deg);
 
     // store time of send
     _last_send = AP_HAL::millis();
