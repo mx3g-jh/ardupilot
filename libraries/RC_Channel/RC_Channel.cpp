@@ -719,8 +719,6 @@ void RC_Channel::do_aux_function_camera_trigger(const AuxSwitchPos ch_flag)
     }
     if (ch_flag == AuxSwitchPos::HIGH) {
         camera->take_picture();
-    } else {
-        // camera->set_modeqq = false;
     }
 }
 
@@ -929,7 +927,6 @@ bool RC_Channel::do_aux_function(const aux_func_t ch_option, const AuxSwitchPos 
     switch(ch_option) {
     case AUX_FUNC::CAMERA_TRIGGER:
         do_aux_function_camera_trigger(ch_flag);
-                gcs().send_text(MAV_SEVERITY_INFO, "11111(%u)   %d", (unsigned int)ch_option,(int)ch_flag);
 
         break;
 
