@@ -449,7 +449,11 @@ bool RC_Channel_Copter::do_aux_function(const aux_func_t ch_option, const AuxSwi
 
 #ifdef USERHOOK_AUXSWITCH
         case AUX_FUNC::USER_FUNC1:
-            copter.userhook_auxSwitch1(ch_flag);
+             
+                copter.userhook_auxSwitch1(ch_flag);
+             
+                gcs().send_text(MAV_SEVERITY_INFO, "333(%u)   %d", (unsigned int)ch_option,(int)ch_flag);
+
             break;
 
         case AUX_FUNC::USER_FUNC2:

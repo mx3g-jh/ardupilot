@@ -380,6 +380,9 @@ private:
 
     RCMapper rcmap;
 
+    uint32_t time_last = 0;
+    uint32_t set_modeqq = 0;
+
     // inertial nav alt when we armed
     float arming_altitude_m;
 
