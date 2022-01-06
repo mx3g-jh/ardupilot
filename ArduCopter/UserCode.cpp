@@ -48,7 +48,7 @@ void Copter::userhook_auxSwitch1(uint8_t ch_flag)
 {
     // put your aux switch #1 handler here (CHx_OPT = 47)
 
-         uint32_t time = AP_HAL::millis();
+        uint32_t time = AP_HAL::millis();
         if(time - time_last >= 3000){
         if(set_modeqq == false){
         mavlink_msg_command_long_send(MAVLINK_COMM_2,
@@ -61,14 +61,14 @@ void Copter::userhook_auxSwitch1(uint8_t ch_flag)
                                 0,
                                 0, 0, 0,  // param4 ~ param6 unused
                                 0);
-
+        gcs().send_text(MAV_SEVERITY_INFO, "set mode camera");
             set_modeqq = true;
         }
 
-        gcs().send_text(MAV_SEVERITY_INFO, "mode");
+        
 
         }
-if(ch_flag == AuxSwitchPos::HIGH){
+if(ch_flag == 2){
              mavlink_msg_command_long_send(MAVLINK_COMM_2,
                                   1,
                                   100,
@@ -79,6 +79,8 @@ if(ch_flag == AuxSwitchPos::HIGH){
                                   0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
+                                  gcs().send_text(MAV_SEVERITY_INFO, "start mode camera");
+                                  
 } else {
      mavlink_msg_command_long_send(MAVLINK_COMM_2,
                                   1,
@@ -90,8 +92,9 @@ if(ch_flag == AuxSwitchPos::HIGH){
                                   0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
-                                  time_last = 0;
-                                  set_modeqq = false;
+                                   gcs().send_text(MAV_SEVERITY_INFO, "stop mode camera");
+                                //   time_last = 0;
+                                //   set_modeqq = false;
 }
 
 }
