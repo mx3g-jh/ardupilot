@@ -47,11 +47,9 @@ void Copter::userhook_SuperSlowLoop()
 void Copter::userhook_auxSwitch1(uint8_t ch_flag)
 {
     // put your aux switch #1 handler here (CHx_OPT = 47)
+if(ch_flag == 2){
 
-        uint32_t time = AP_HAL::millis();
-        if(time - time_last >= 3000){
-        if(set_modeqq == false){
-        mavlink_msg_command_long_send(MAVLINK_COMM_2,
+            mavlink_msg_command_long_send(MAVLINK_COMM_2,
                                 1,
                                 100,
                                 MAV_CMD_SET_CAMERA_MODE,
@@ -61,14 +59,7 @@ void Copter::userhook_auxSwitch1(uint8_t ch_flag)
                                 0,
                                 0, 0, 0,  // param4 ~ param6 unused
                                 0);
-        gcs().send_text(MAV_SEVERITY_INFO, "set mode camera");
-            set_modeqq = true;
-        }
-
-        
-
-        }
-if(ch_flag == 2){
+             gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : video");
              mavlink_msg_command_long_send(MAVLINK_COMM_2,
                                   1,
                                   100,
@@ -79,7 +70,7 @@ if(ch_flag == 2){
                                   0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
-                                  gcs().send_text(MAV_SEVERITY_INFO, "start mode camera");
+                                  gcs().send_text(MAV_SEVERITY_INFO, "start camera video");
                                   
 } else {
      mavlink_msg_command_long_send(MAVLINK_COMM_2,
@@ -92,9 +83,22 @@ if(ch_flag == 2){
                                   0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
-                                   gcs().send_text(MAV_SEVERITY_INFO, "stop mode camera");
-                                //   time_last = 0;
-                                //   set_modeqq = false;
+                    gcs().send_text(MAV_SEVERITY_INFO, "stop mode camera");
+
+
+                     mavlink_msg_command_long_send(MAVLINK_COMM_2,
+                                1,
+                                100,
+                                MAV_CMD_SET_CAMERA_MODE,
+                                0,        // confirmation of zero means this is the first time this message has been sent
+                                0,
+                                0,
+                                0,
+                                0, 0, 0,  // param4 ~ param6 unused
+                                0);
+                                gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
+
+
 }
 
 }

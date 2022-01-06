@@ -481,7 +481,7 @@ void AP_Camera::take_picture()
     // forward to all components
     GCS_MAVLINK::send_to_components(MAVLINK_MSG_ID_COMMAND_LONG, (char*)&cmd_msg, sizeof(cmd_msg));
 
-        gcs().send_text(MAV_SEVERITY_INFO, "qwqwqw");
+        gcs().send_text(MAV_SEVERITY_INFO, "take photo");
 
          mavlink_msg_command_long_send(MAVLINK_COMM_2,
                                   1,
@@ -493,23 +493,23 @@ void AP_Camera::take_picture()
                                   1,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
-         uint32_t time = AP_HAL::millis();
-        if(time - time_last >= 3000){
-        if(set_modeqq == false){
-        mavlink_msg_command_long_send(MAVLINK_COMM_2,
-                                1,
-                                100,
-                                MAV_CMD_SET_CAMERA_MODE,
-                                0,        // confirmation of zero means this is the first time this message has been sent
-                                0,
-                                0,
-                                0,
-                                0, 0, 0,  // param4 ~ param6 unused
-                                0);
-                                gcs().send_text(MAV_SEVERITY_INFO, "mode");
+        //  uint32_t time = AP_HAL::millis();
+        // if(time - time_last >= 3000){
+        // if(set_modeqq == false){
+        // mavlink_msg_command_long_send(MAVLINK_COMM_2,
+        //                         1,
+        //                         100,
+        //                         MAV_CMD_SET_CAMERA_MODE,
+        //                         0,        // confirmation of zero means this is the first time this message has been sent
+        //                         0,
+        //                         0,
+        //                         0,
+        //                         0, 0, 0,  // param4 ~ param6 unused
+        //                         0);
+        //                         gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
 
-            set_modeqq = true;
-        }
+        //     set_modeqq = true;
+        // }
         }
 
                                 //     mavlink_msg_command_long_send(MAVLINK_COMM_0,

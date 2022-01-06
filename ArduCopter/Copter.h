@@ -379,9 +379,6 @@ private:
     Mode::Number prev_control_mode;
 
     RCMapper rcmap;
-    uint32_t time_last = AP_HAL::millis();
-    // uint32_t time_last = 0;
-    bool set_modeqq = false;
 
     // inertial nav alt when we armed
     float arming_altitude_m;
