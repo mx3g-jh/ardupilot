@@ -720,7 +720,7 @@ void RC_Channel::do_aux_function_camera_trigger(const AuxSwitchPos ch_flag)
     if (ch_flag == AuxSwitchPos::HIGH) {
         camera->take_picture();
     } else {
-        camera->set_modeqq = false;
+        // camera->set_modeqq = false;
     }
 }
 

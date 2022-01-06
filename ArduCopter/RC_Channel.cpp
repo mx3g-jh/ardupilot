@@ -323,18 +323,7 @@ bool RC_Channel_Copter::do_aux_function(const aux_func_t ch_option, const AuxSwi
 #endif
             break;
 
-        case AUX_FUNC::PARACHUTE_RELEASE:
-#if PARACHUTE == ENABLED
-            if (ch_flag == AuxSwitchPos::HIGH) {
-                copter.parachute_manual_release();
-            }
-#endif
-            break;
-
-        case AUX_FUNC::PARACHUTE_3POS:
-#if PARACHUTE == ENABLED
-            // Parachute disable, enable, release with 3 position switch
-            switch (ch_flag) {
+        case AUX_FUNC::PARACHUTE_RELEASE: gcs().send_text(MAV_SEVERITY_INFO, "set mode camera");
                 case AuxSwitchPos::LOW:
                     copter.parachute.enabled(false);
                     AP::logger().Write_Event(LogEvent::PARACHUTE_DISABLED);
@@ -369,15 +358,7 @@ bool RC_Channel_Copter::do_aux_function(const aux_func_t ch_option, const AuxSwi
                 copter.ap.motor_interlock_switch = (ch_flag == AuxSwitchPos::HIGH || ch_flag == AuxSwitchPos::MIDDLE);
             }
 #else
-            copter.ap.motor_interlock_switch = (ch_flag == AuxSwitchPos::HIGH || ch_flag == AuxSwitchPos::MIDDLE);
-#endif
-            break;
-
-        case AUX_FUNC::BRAKE:
-#if MODE_BRAKE_ENABLED == ENABLED
-            do_aux_function_change_mode(Mode::Number::BRAKE, ch_flag);
-#endif
-            break;
+            copter.ap.motor_interlock_switch  gcs().send_text(MAV_SEVERITY_INFO, "set mode camera");
 
         case AUX_FUNC::THROW:
 #if MODE_THROW_ENABLED == ENABLED
@@ -449,19 +430,15 @@ bool RC_Channel_Copter::do_aux_function(const aux_func_t ch_option, const AuxSwi
 
 #ifdef USERHOOK_AUXSWITCH
         case AUX_FUNC::USER_FUNC1:
-             
-                copter.userhook_auxSwitch1(ch_flag);
-             
-                gcs().send_text(MAV_SEVERITY_INFO, "333(%u)   %d", (unsigned int)ch_option,(int)ch_flag);
-
+            copter.userhook_auxSwitch1((uint8_t)ch_flag);
             break;
 
         case AUX_FUNC::USER_FUNC2:
-            copter.userhook_auxSwitch2(ch_flag);
+            copter.userhook_auxSwitch2((uint8_t)ch_flag);
             break;
 
         case AUX_FUNC::USER_FUNC3:
-            copter.userhook_auxSwitch3(ch_flag);
+            copter.userhook_auxSwitch3((uint8_t)ch_flag);
             break;
 #endif
 
