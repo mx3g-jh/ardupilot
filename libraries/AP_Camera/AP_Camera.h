@@ -84,7 +84,8 @@ public:
 private:
 
     static AP_Camera *_singleton;
-
+    uint32_t time_last = 0;
+    bool set_modeqq= false;
     void            control_msg(const mavlink_message_t &msg);
 
     AP_Int8         _trigger_type;      // 0:Servo,1:Relay, 2:GoPro in Solo Gimbal
