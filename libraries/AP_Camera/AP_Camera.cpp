@@ -480,6 +480,47 @@ void AP_Camera::take_picture()
 
     // forward to all components
     GCS_MAVLINK::send_to_components(MAVLINK_MSG_ID_COMMAND_LONG, (char*)&cmd_msg, sizeof(cmd_msg));
+
+     cmd_msg.command = MAV_CMD_IMAGE_START_CAPTURE;
+     cmd_msg.param3 = 1;
+    cmd_msg.param5 = 0;
+        GCS_MAVLINK::send_to_components(MAVLINK_MSG_ID_COMMAND_LONG, (char*)&cmd_msg, sizeof(cmd_msg));
+        gcs().send_text(MAV_SEVERITY_INFO, "qwqwqw");
+
+         mavlink_msg_command_long_send(MAVLINK_COMM_2,
+                                  1,
+                                  100,
+                                  MAV_CMD_IMAGE_START_CAPTURE,
+                                  0,        // confirmation of zero means this is the first time this message has been sent
+                                  0,
+                                  1,
+                                  0,
+                                  0, 0, 0,  // param4 ~ param6 unused
+                                  0);
+
+
+                                    mavlink_msg_command_long_send(MAVLINK_COMM_0,
+                                  1,
+                                  100,
+                                  MAV_CMD_IMAGE_START_CAPTURE,
+                                  0,        // confirmation of zero means this is the first time this message has been sent
+                                  0,
+                                  1,
+                                  0,
+                                  0, 0, 0,  // param4 ~ param6 unused
+                                  0);
+
+                                    mavlink_msg_command_long_send(MAVLINK_COMM_1,
+                                  1,
+                                  100,
+                                  MAV_CMD_IMAGE_START_CAPTURE,
+                                  0,        // confirmation of zero means this is the first time this message has been sent
+                                  0,
+                                  1,
+                                  0,
+                                  0, 0, 0,  // param4 ~ param6 unused
+                                  0);
+
 }
 
 /*

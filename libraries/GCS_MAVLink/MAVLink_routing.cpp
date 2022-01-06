@@ -205,10 +205,10 @@ void MAVLink_routing::send_to_components(const char *pkt, const mavlink_msg_entr
 
     // check learned routes
     for (uint8_t i=0; i<num_routes; i++) {
-        if (routes[i].sysid != mavlink_system.sysid) {
-            // our system ID hasn't been seen on this link
-            continue;
-        }
+        // if (routes[i].sysid != mavlink_system.sysid) {
+        //     // our system ID hasn't been seen on this link
+        //     continue;
+        // }
         if (sent_to_chan[routes[i].channel]) {
             // we've already send it on this link
             continue;
