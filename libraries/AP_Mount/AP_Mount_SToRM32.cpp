@@ -208,7 +208,7 @@ void AP_Mount_SToRM32::send_do_mount_control(float pitch_deg, float roll_deg, fl
                                   0, 0, 0,  // param4 ~ param6 unused
                                   mount_mode);
 
-        // gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_caculate,(int)pitch_deg,(int)yaw_deg);
+        // gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_caculate,(int)pitch_deg,(int)yaw_caculate);
 
     // store time of send
     _last_send = AP_HAL::millis();

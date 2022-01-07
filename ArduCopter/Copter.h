@@ -222,7 +222,10 @@ public:
     friend class ModeAutorotate;
 
     Copter(void);
-
+    int camera_status_flag = 0;
+    bool mode_change_to_redio = false;
+    uint32_t delay_start = 0;
+    uint32_t delay_stop = 0;
 private:
 
     // key aircraft parameters passed to multiple libraries
@@ -287,6 +290,7 @@ private:
         };
         // set surface to track
         void set_surface(Surface new_surface);
+
 
     private:
         Surface surface = Surface::GROUND;
