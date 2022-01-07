@@ -82,7 +82,7 @@ public:
     AP_Camera::CamTrigType get_trigger_type(void);
 
 private:
-
+    int32_t index = 0;
     static AP_Camera *_singleton;
     uint32_t time_last = 0;
     bool set_modeqq= false;
