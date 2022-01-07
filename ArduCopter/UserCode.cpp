@@ -81,7 +81,9 @@ if(ch_flag == 2){
                                 0,
                                 0, 0, 0,  // param4 ~ param6 unused
                                 0);
-             gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : video");
+            hal.scheduler->delay(2000);
+            gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : video");
+
 
 mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   1,
@@ -155,7 +157,7 @@ mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
                     gcs().send_text(MAV_SEVERITY_INFO, "stop mode camera");
-
+            hal.scheduler->delay(2000);
 
 mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                 1,

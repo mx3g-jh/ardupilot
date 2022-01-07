@@ -490,7 +490,7 @@ mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   0,
                                   0,
                                   1,
-                                  0, 0, 0,  // param4 ~ param6 unused
+                                  index, 0, 0,  // param4 ~ param6 unused
                                   0);
                                   mavlink_msg_command_long_send(MAVLINK_COMM_1,
                                   1,
@@ -510,9 +510,9 @@ mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   0,
                                   0,
                                   1,
-                                  0, 0, 0,  // param4 ~ param6 unused
+                                  index, 0, 0,  // param4 ~ param6 unused
                                   0);
-
+                                index++;
                                   gcs().send_text(MAV_SEVERITY_INFO, "take photo");
          uint32_t time = AP_HAL::millis();
         if(time - time_last >= 3000){
