@@ -249,13 +249,13 @@ bool MAVLink_routing::find_by_mavtype(uint8_t mavtype, uint8_t &sysid, uint8_t &
 {
     // check learned routes
     for (uint8_t i=0; i<num_routes; i++) {
-        if (routes[i].mavtype == mavtype) {
+        // if (routes[i].mavtype == mavtype) {
             if(routes[i].compid == 154) {
             sysid = routes[i].sysid;
             compid = routes[i].compid;
             channel = routes[i].channel;
             return true;
-            }
+            // }
         }
     }
 
