@@ -233,7 +233,7 @@ private:
     ParametersG2 g2;
 
     uint8_t last_rc_value_video = 3;
-    uint64_t tnow_ms;
+    uint64_t nowvideo_ms;
 uint64_t last_ms;
     // used to detect MAVLink acks from GCS to stop compassmot
     uint8_t command_ack_counter;

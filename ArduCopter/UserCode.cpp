@@ -47,7 +47,7 @@ void Copter::userhook_SuperSlowLoop()
 void Copter::userhook_auxSwitch1(uint8_t ch_flag)
 {
 
-    tnow_ms = AP_HAL::millis();
+    nowvideo_ms = AP_HAL::millis();
     // put your aux switch #1 handler here (CHx_OPT = 47)
 if(ch_flag == 2 && ch_flag !=last_rc_value_video && last_rc_value_video!=7){
 
@@ -86,7 +86,7 @@ if(ch_flag == 2 && ch_flag !=last_rc_value_video && last_rc_value_video!=7){
             // hal.scheduler->delay(2000);
 if(last_rc_value_video != 3){
    
-            last_ms =  tnow_ms;
+            last_ms =  nowvideo_ms;
 
             last_rc_value_video = ch_flag;
     
@@ -97,7 +97,7 @@ if(last_rc_value_video != 3){
           
              gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : video");
 
-} else if (ch_flag ==2 && last_rc_value_video == ch_flag && (tnow_ms -last_ms >2000  && last_rc_value_video !=4)){
+} else if (ch_flag ==2 && last_rc_value_video == ch_flag && (nowvideo_ms -last_ms >2000  && last_rc_value_video !=4)){
 
 mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   1,
@@ -176,11 +176,11 @@ if (ch_flag != 2 && (last_rc_value_video ==4 || last_rc_value_video ==7)) {
                                   0);
                     gcs().send_text(MAV_SEVERITY_INFO, "stop mode camera");
 
-                    last_ms =  tnow_ms;
+                    last_ms =  nowvideo_ms;
 
                     last_rc_value_video = ch_flag;
                     last_rc_value_video = 5;
-} else ((ch_flag != 2 && last_rc_value_video ==5 && (tnow_ms -last_ms) > 2000)  || (ch_flag != 2 && last_rc_value_video ==3)){
+} else if ((ch_flag != 2 && last_rc_value_video ==5 && (nowvideo_ms -last_ms) > 2000)  || (ch_flag != 2 && last_rc_value_video ==3)) {
 
 
 mavlink_msg_command_long_send(MAVLINK_COMM_0,
