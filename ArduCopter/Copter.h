@@ -232,6 +232,9 @@ private:
     Parameters g;
     ParametersG2 g2;
 
+    uint8_t last_rc_value_video = 3;
+    uint64_t tnow_ms;
+uint64_t last_ms;
     // used to detect MAVLink acks from GCS to stop compassmot
     uint8_t command_ack_counter;
 
@@ -540,6 +543,7 @@ private:
 
     // last valid RC input time
     uint32_t last_radio_update_ms;
+uint64_t time_delay;
 
     // last esc calibration notification update
     uint32_t esc_calibration_notify_update_ms;

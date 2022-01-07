@@ -46,8 +46,10 @@ void Copter::userhook_SuperSlowLoop()
 #ifdef USERHOOK_AUXSWITCH
 void Copter::userhook_auxSwitch1(uint8_t ch_flag)
 {
+
+    tnow_ms = AP_HAL::millis();
     // put your aux switch #1 handler here (CHx_OPT = 47)
-if(ch_flag == 2){
+if(ch_flag == 2 && ch_flag !=last_rc_value_video && last_rc_value_video!=7){
 
     mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                 1,
@@ -81,9 +83,21 @@ if(ch_flag == 2){
                                 0,
                                 0, 0, 0,  // param4 ~ param6 unused
                                 0);
-            hal.scheduler->delay(2000);
-            gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : video");
+            // hal.scheduler->delay(2000);
+if(last_rc_value_video != 3){
+   
+            last_ms =  tnow_ms;
 
+            last_rc_value_video = ch_flag;
+    
+
+} else {
+    last_rc_value_video = 7;
+}
+          
+             gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : video");
+
+} else if (ch_flag ==2 && last_rc_value_video == ch_flag && (tnow_ms -last_ms >2000  && last_rc_value_video !=4)){
 
 mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   1,
@@ -120,8 +134,12 @@ mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
                                   gcs().send_text(MAV_SEVERITY_INFO, "start camera video");
+
+                                  last_rc_value_video = 4;
                                   
-} else {
+} 
+
+if (ch_flag != 2 && (last_rc_value_video ==4 || last_rc_value_video ==7)) {
 
     mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   1,
@@ -157,7 +175,13 @@ mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
                     gcs().send_text(MAV_SEVERITY_INFO, "stop mode camera");
-            hal.scheduler->delay(2000);
+
+                    last_ms =  tnow_ms;
+
+                    last_rc_value_video = ch_flag;
+                    last_rc_value_video = 5;
+} else ((ch_flag != 2 && last_rc_value_video ==5 && (tnow_ms -last_ms) > 2000)  || (ch_flag != 2 && last_rc_value_video ==3)){
+
 
 mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                 1,
@@ -194,6 +218,8 @@ mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                 0, 0, 0,  // param4 ~ param6 unused
                                 0);
                                 gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
+                        
+        last_rc_value_video = 6;
 
 
 }

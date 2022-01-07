@@ -614,10 +614,12 @@ bool RC_Channel::read_aux()
     if (!read_3pos_switch(new_position)) {
         return false;
     }
+if(_option != AUX_FUNC::USER_FUNC1) {
 
     if (!debounce_completed((int8_t)new_position)) {
         return false;
     }
+}
 
 #if !HAL_MINIMIZE_FEATURES
     // announce the change to the GCS:
