@@ -295,6 +295,78 @@ void AP_Camera::configure(float shooting_mode, float shutter_speed, float apertu
 
 void AP_Camera::control(float session, float zoom_pos, float zoom_step, float focus_lock, float shooting_cmd, float cmd_id)
 {
+    if(fist_mission_take_picture == false) {
+        fist_mission_take_picture = true;
+
+        mavlink_msg_command_long_send(MAVLINK_COMM_0,
+                                1,
+                                100,
+                                MAV_CMD_SET_CAMERA_MODE,
+                                0,        // confirmation of zero means this is the first time this message has been sent
+                                0,
+                                0,
+                                0,
+                                0, 0, 0,  // param4 ~ param6 unused
+                                0);
+
+        mavlink_msg_command_long_send(MAVLINK_COMM_1,
+                                1,
+                                100,
+                                MAV_CMD_SET_CAMERA_MODE,
+                                0,        // confirmation of zero means this is the first time this message has been sent
+                                0,
+                                0,
+                                0,
+                                0, 0, 0,  // param4 ~ param6 unused
+                                0);
+
+        mavlink_msg_command_long_send(MAVLINK_COMM_2,
+                                1,
+                                100,
+                                MAV_CMD_SET_CAMERA_MODE,
+                                0,        // confirmation of zero means this is the first time this message has been sent
+                                0,
+                                0,
+                                0,
+                                0, 0, 0,  // param4 ~ param6 unused
+                                0);
+        gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
+
+    }
+
+mavlink_msg_command_long_send(MAVLINK_COMM_0,
+                                  1,
+                                  100,
+                                  MAV_CMD_IMAGE_START_CAPTURE,
+                                  0,        // confirmation of zero means this is the first time this message has been sent
+                                  0,
+                                  0,
+                                  shooting_cmd,
+                                  index, 0, 0,  // param4 ~ param6 unused
+                                  0);
+mavlink_msg_command_long_send(MAVLINK_COMM_1,
+                                  1,
+                                  100,
+                                  MAV_CMD_IMAGE_START_CAPTURE,
+                                  0,        // confirmation of zero means this is the first time this message has been sent
+                                  0,
+                                  0,
+                                  shooting_cmd,
+                                  0, 0, 0,  // param4 ~ param6 unused
+                                  0);
+mavlink_msg_command_long_send(MAVLINK_COMM_2,
+                                  1,
+                                  100,
+                                  MAV_CMD_IMAGE_START_CAPTURE,
+                                  0,        // confirmation of zero means this is the first time this message has been sent
+                                  0,
+                                  0,
+                                  shooting_cmd,
+                                  index, 0, 0,  // param4 ~ param6 unused
+                                  0);
+                                index++;
+gcs().send_text(MAV_SEVERITY_INFO, "take photo");
+
     // take picture
     if (is_equal(shooting_cmd,1.0f)) {
         trigger_pic();
@@ -502,7 +574,7 @@ mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   1,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
-         mavlink_msg_command_long_send(MAVLINK_COMM_2,
+mavlink_msg_command_long_send(MAVLINK_COMM_2,
                                   1,
                                   100,
                                   MAV_CMD_IMAGE_START_CAPTURE,
@@ -513,7 +585,7 @@ mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   index, 0, 0,  // param4 ~ param6 unused
                                   0);
                                 index++;
-                                  gcs().send_text(MAV_SEVERITY_INFO, "take photo");
+gcs().send_text(MAV_SEVERITY_INFO, "take photo");
          uint32_t time = AP_HAL::millis();
         if(time - time_last >= 3000){
         if(set_modeqq == false){
