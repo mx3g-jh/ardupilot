@@ -141,6 +141,11 @@ void AP_Mount_Backend::update_targets_from_rc()
             _angle_ef_target_rad.z = angle_input_rad(pan_ch, _state._pan_angle_min, _state._pan_angle_max);
         }
     }
+    float pitch_deg,yaw_deg;
+pitch_deg = ToDeg(_angle_ef_target_rad.y);
+yaw_deg = ToDeg(_angle_ef_target_rad.z);
+    _angle_ef_target_rad.z = ToRad(caculate_yaw_angle(yaw_deg));
+    _angle_ef_target_rad.y = ToRad(caculate_pitch_angle(pitch_deg));
 
     // gcs().send_text(MAV_SEVERITY_INFO, "rc  %d",tilt_ch->get_radio_in());
 }
