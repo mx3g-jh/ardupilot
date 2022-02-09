@@ -148,6 +148,7 @@ private:
     {
         return _feedback_pin > 0;
     }
+    bool fist_mission_take_picture=false;
 
 };
 
