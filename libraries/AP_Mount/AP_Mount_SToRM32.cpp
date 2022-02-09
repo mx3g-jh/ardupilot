@@ -195,16 +195,14 @@ void AP_Mount_SToRM32::send_do_mount_control(float pitch_deg, float roll_deg, fl
         return;
     }
 
-    float yaw_caculate = caculate_yaw_angle(yaw_deg);
-    float pitch_caculate = caculate_pitch_angle(pitch_deg);
     mavlink_msg_command_long_send(_chan,
                                   _sysid,
                                   _compid,
                                   MAV_CMD_DO_MOUNT_CONTROL,
                                   0,        // confirmation of zero means this is the first time this message has been sent
-                                  pitch_caculate,
+                                  pitch_deg,
                                   roll_deg,
-                                  yaw_caculate,
+                                  yaw_deg,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   mount_mode);
 
