@@ -14,7 +14,6 @@
 
 #define AP_MOUNT_STORM32_RESEND_MS  1000    // resend angle targets to gimbal once per second
 #define AP_MOUNT_STORM32_SEARCH_MS  600000   // search for gimbal for 1 minute after startup
-#define PUS_STEP 0.5f
 class AP_Mount_SToRM32 : public AP_Mount_Backend
 {
 
@@ -44,14 +43,7 @@ private:
 
     // send_do_mount_control - send a COMMAND_LONG containing a do_mount_control message
     void send_do_mount_control(float pitch_deg, float roll_deg, float yaw_deg, enum MAV_MOUNT_MODE mount_mode);
-    float caculate_pitch_angle(float pitch_deg);
-    float caculate_yaw_angle(float yaw_deg);
-    float last_pitch_channel = 0.0f;
-    float last_yaw_channel = 0.0f;
-    float pitch_dig = 0.0f;
-    float yaw_dig = 0.0f;
-    float pitch_pecent = 0.0f;
-    float yaw_pecent = 0.0f;
+
     // internal variables
     bool _initialised;              // true once the driver has been initialised
     uint8_t _sysid;                 // sysid of gimbal

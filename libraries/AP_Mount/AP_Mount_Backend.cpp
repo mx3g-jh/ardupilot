@@ -98,6 +98,50 @@ void AP_Mount_Backend::control(int32_t pitch_or_lat, int32_t roll_or_lon, int32_
     }
 }
 
+float AP_Mount_Backend::caculate_pitch_angle(float pitch_deg)
+{
+    pitch_pecent = 0.008*abs(abs(pitch_deg) - 45.0f);
+
+    if(pitch_deg <= -55.0f && pitch_deg >= -90.0f)
+    {
+        pitch_dig -= PUS_STEP*pitch_pecent;
+        if(pitch_dig <= -90.0f)pitch_dig = -90.0f;
+        last_pitch_channel = pitch_dig;
+    }else if(pitch_deg > -55.0f && pitch_deg < -35.0f)
+    {
+        last_pitch_channel = pitch_dig;
+    }else if(pitch_deg >= -35.0f && pitch_deg <= 0.0f)
+    {
+        pitch_dig += PUS_STEP*pitch_pecent;
+        if(pitch_dig >= 0.0f)pitch_dig = 0.0f;
+        last_pitch_channel = pitch_dig;
+    }
+
+    return last_pitch_channel;
+}
+
+float AP_Mount_Backend::caculate_yaw_angle(float yaw_deg)
+{
+    yaw_pecent = 0.008*abs(yaw_deg);
+
+    if(yaw_deg <= -15.0f && yaw_deg >= -90.0f)
+    {
+        yaw_dig -= PUS_STEP*yaw_pecent;
+        if(yaw_dig <= -90.0f)yaw_dig = -90.0f;
+        last_yaw_channel = yaw_deg;
+    }else if(yaw_deg > -15.0f && yaw_deg < 15.0f)
+    {
+        last_yaw_channel = yaw_dig;
+    }else if(yaw_deg >= 15.0f && yaw_deg <= 90.0f)
+    {
+        yaw_dig += PUS_STEP*yaw_pecent;
+        if(yaw_dig >= 90.0f)yaw_dig = 90.0f;
+        last_yaw_channel = yaw_dig;
+    }
+
+    return last_yaw_channel;
+}
+
 void AP_Mount_Backend::rate_input_rad(float &out, const RC_Channel *chan, float min, float max) const
 {
     if ((chan == nullptr) || (chan->get_radio_in() == 0)) {
