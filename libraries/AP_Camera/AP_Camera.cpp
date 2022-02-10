@@ -332,8 +332,8 @@ void AP_Camera::control(float session, float zoom_pos, float zoom_step, float fo
                                 0, 0, 0,  // param4 ~ param6 unused
                                 0);
         gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
-
-    } else if(is_equal(shooting_cmd,10.0f){
+    }
+    } else if(is_equal(shooting_cmd,10.0f)){
         mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                 1,
                                 100,
@@ -403,7 +403,7 @@ void AP_Camera::control(float session, float zoom_pos, float zoom_step, float fo
     gcs().send_text(MAV_SEVERITY_INFO, "start camera video");
     return;
 
-    } else if(is_equal(shooting_cmd,11.0f){
+    } else if(is_equal(shooting_cmd,11.0f)){
         mavlink_msg_command_long_send(MAVLINK_COMM_2,
                                   1,
                                   100,
