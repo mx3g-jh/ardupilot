@@ -23,7 +23,7 @@
 #include "AP_Mount.h"
 #if HAL_MOUNT_ENABLED
 #include <RC_Channel/RC_Channel.h>
-
+#define PUS_STEP 0.5f
 class AP_Mount_Backend
 {
 public:
@@ -123,7 +123,14 @@ protected:
     Vector3f    _angle_ef_target_rad;   // desired earth-frame roll, tilt and vehicle-relative pan angles in radians
 
 private:
-
+    float caculate_pitch_angle(float pitch_deg);
+    float caculate_yaw_angle(float yaw_deg);
+    float last_pitch_channel = 0.0f;
+    float last_yaw_channel = 0.0f;
+    float pitch_dig = 0.0f;
+    float yaw_dig = 0.0f;
+    float pitch_pecent = 0.0f;
+    float yaw_pecent = 0.0f;
     void rate_input_rad(float &out, const RC_Channel *ch, float min, float max) const;
 };
 
