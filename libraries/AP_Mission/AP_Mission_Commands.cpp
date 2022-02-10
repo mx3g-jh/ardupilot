@@ -123,6 +123,13 @@ bool AP_Mission::start_command_camera(const AP_Mission::Mission_Command& cmd)
             camera->take_picture();
         }
         return true;
+    case MAV_CMD_DO_CONTROL_VIDEO:
+         camera->set_trigger_distance(cmd.content.cam_trigg_dist.meters);
+        if (cmd.content.cam_trigg_dist.trigger == 1) {
+            camera->take_picture();
+        }
+        return true;
+
 
     default:
 #if CONFIG_HAL_BOARD == HAL_BOARD_SITL

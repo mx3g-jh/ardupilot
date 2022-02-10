@@ -62,7 +62,7 @@ if(mode_change_to_redio == false ){
                                   0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
-                    gcs().send_text(MAV_SEVERITY_INFO, "stop mode camera");
+                    gcs().send_text(MAV_SEVERITY_INFO, "stop video");
         camera_status_flag = 3;
         delay_stop =  AP_HAL::millis();
     }
