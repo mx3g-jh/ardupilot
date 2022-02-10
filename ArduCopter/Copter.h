@@ -433,6 +433,7 @@ private:
     float super_simple_cos_yaw;
     float super_simple_sin_yaw;
     struct Location global_position_current_loc;
+    uint8_t send_mavlink_camera_state = 0;
 
     // Stores initial bearing when armed - initial simple bearing is modified in super simple mode so not suitable
     int32_t initial_armed_bearing;
