@@ -224,6 +224,9 @@ public:
     Copter(void);
     int camera_status_flag = 0;
     bool mode_change_to_redio = false;
+    bool first_come_in = false;
+    bool first_detect = false;
+    uint8_t  first_mode = 0;
     uint32_t delay_start = 0;
     uint32_t delay_stop = 0;
 private:
@@ -272,7 +275,6 @@ private:
         // update_surface_offset - manages the vertical offset of the position controller to follow the
         //   measured ground or ceiling level measured using the range finder.
         void update_surface_offset();
-
         // get/set target altitude (in cm) above ground
         bool get_target_alt_cm(float &target_alt_cm) const;
         void set_target_alt_cm(float target_alt_cm);
@@ -433,6 +435,7 @@ private:
     int32_t super_simple_last_bearing;
     float super_simple_cos_yaw;
     float super_simple_sin_yaw;
+    struct Location global_position_current_loc;
 
     // Stores initial bearing when armed - initial simple bearing is modified in super simple mode so not suitable
     int32_t initial_armed_bearing;

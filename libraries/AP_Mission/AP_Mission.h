@@ -590,7 +590,7 @@ public:
     // allow lua to get/set any WP items in any order in a mavlink-ish kinda way.
     bool get_item(uint16_t index, mavlink_mission_item_int_t& result) const ;
     bool set_item(uint16_t index, mavlink_mission_item_int_t& source) ;
-
+    uint8_t cmd_mode = 0;
 private:
     static AP_Mission *_singleton;
 
