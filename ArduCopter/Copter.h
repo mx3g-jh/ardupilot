@@ -226,6 +226,9 @@ public:
     bool mode_change_to_redio = false;
     uint32_t delay_start = 0;
     uint32_t delay_stop = 0;
+    bool first_come_in = false;
+    uint8_t first_mode;
+    bool first_detect = false;
 private:
 
     // key aircraft parameters passed to multiple libraries

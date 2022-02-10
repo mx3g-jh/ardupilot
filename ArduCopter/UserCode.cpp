@@ -13,14 +13,17 @@ void Copter::userhook_init()
 #ifdef USERHOOK_FASTLOOP
 void Copter::userhook_FastLoop()
 {
+    uint64_t time_unix = 0;
+    float posD;
+    Vector3f vel;
+    AP_AHRS &ahrs2 = AP::ahrs();
     switch (send_mavlink_camera_state)
     {
     case 0:
         // put your 100Hz code here
-        uint64_t time_unix = 0;
         AP::rtc().get_utc_usec(time_unix); // may fail, leaving time_unix at 0
         // add 8h in china
-        time_unix = time_unix + 8 * 60 * 60 * 1000000;
+        time_unix = time_unix +28800000000; // +8 UTC
 
         mavlink_msg_system_time_send(
             MAVLINK_COMM_2,
@@ -29,16 +32,13 @@ void Copter::userhook_FastLoop()
             // send_mavlink_camera_state++;
         break;
     case 1:
-         AP_AHRS &ahrs2 = AP::ahrs();
 
         UNUSED_RESULT(ahrs2.get_position(global_position_current_loc)); 
 
-        Vector3f vel;
         if (!ahrs2.get_velocity_NED(vel)) {
             vel.zero();
         }
 
-        float posD;
         AP::ahrs().get_relative_position_D_home(posD);
         mavlink_msg_global_position_int_send(
             MAVLINK_COMM_2,
@@ -53,7 +53,6 @@ void Copter::userhook_FastLoop()
             ahrs2.yaw_sensor);                // compass heading in 1/100 degree
             // send_mavlink_camera_state++;
         break;
-    
     default:
         break;
     }
@@ -63,8 +62,6 @@ if (send_mavlink_camera_state < 2) {
 } else {
     send_mavlink_camera_state = 0;
 }
-
-    
 
    
     
