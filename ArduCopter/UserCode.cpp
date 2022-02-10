@@ -13,39 +13,60 @@ void Copter::userhook_init()
 #ifdef USERHOOK_FASTLOOP
 void Copter::userhook_FastLoop()
 {
-    // put your 100Hz code here
-    uint64_t time_unix = 0;
-    AP::rtc().get_utc_usec(time_unix); // may fail, leaving time_unix at 0
-    // add 8h in china
-    time_unix = time_unix + 8 * 60 * 60 * 1000000;
+    switch (send_mavlink_camera_state)
+    {
+    case 0:
+        // put your 100Hz code here
+        uint64_t time_unix = 0;
+        AP::rtc().get_utc_usec(time_unix); // may fail, leaving time_unix at 0
+        // add 8h in china
+        time_unix = time_unix + 8 * 60 * 60 * 1000000;
 
-    mavlink_msg_system_time_send(
-        MAVLINK_COMM_2,
-        time_unix,
-        AP_HAL::millis());
+        mavlink_msg_system_time_send(
+            MAVLINK_COMM_2,
+            time_unix,
+            AP_HAL::millis());
+            // send_mavlink_camera_state++;
+        break;
+    case 1:
+         AP_AHRS &ahrs2 = AP::ahrs();
 
-    AP_AHRS &ahrs2 = AP::ahrs();
+        UNUSED_RESULT(ahrs2.get_position(global_position_current_loc)); 
 
-    UNUSED_RESULT(ahrs2.get_position(global_position_current_loc)); 
+        Vector3f vel;
+        if (!ahrs2.get_velocity_NED(vel)) {
+            vel.zero();
+        }
 
-    Vector3f vel;
-    if (!ahrs2.get_velocity_NED(vel)) {
-        vel.zero();
+        float posD;
+        AP::ahrs().get_relative_position_D_home(posD);
+        mavlink_msg_global_position_int_send(
+            MAVLINK_COMM_2,
+            AP_HAL::millis(),
+            global_position_current_loc.lat, // in 1E7 degrees
+            global_position_current_loc.lng, // in 1E7 degrees
+            global_position_current_loc.alt * 10UL,      // millimeters above ground/sea level
+            posD * (-1000.0f),  // millimeters above home
+            vel.x * 100,                     // X speed cm/s (+ve North)
+            vel.y * 100,                     // Y speed cm/s (+ve East)
+            vel.z * 100,                     // Z speed cm/s (+ve Down)
+            ahrs2.yaw_sensor);                // compass heading in 1/100 degree
+            // send_mavlink_camera_state++;
+        break;
+    
+    default:
+        break;
     }
+send_mavlink_camera_state++;
+if (send_mavlink_camera_state < 2) {
+    return;
+} else {
+    send_mavlink_camera_state = 0;
+}
 
-float posD;
-AP::ahrs().get_relative_position_D_home(posD);
-    mavlink_msg_global_position_int_send(
-        MAVLINK_COMM_2,
-        AP_HAL::millis(),
-        global_position_current_loc.lat, // in 1E7 degrees
-        global_position_current_loc.lng, // in 1E7 degrees
-       global_position_current_loc.alt * 10UL,      // millimeters above ground/sea level
-        posD * (-1000.0f),  // millimeters above home
-        vel.x * 100,                     // X speed cm/s (+ve North)
-        vel.y * 100,                     // Y speed cm/s (+ve East)
-        vel.z * 100,                     // Z speed cm/s (+ve Down)
-        ahrs2.yaw_sensor);                // compass heading in 1/100 degree
+    
+
+   
     
 if(first_detect == true ){
     if(mode_change_to_redio == true ){
