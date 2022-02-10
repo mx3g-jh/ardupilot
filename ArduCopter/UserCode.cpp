@@ -157,7 +157,7 @@ if(mode_change_to_redio == false || ap_mission->cmd_mode == 2){
                                   0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
-        gcs().send_text(MAV_SEVERITY_INFO, "stop mode camera");
+        gcs().send_text(MAV_SEVERITY_INFO, "stop camera video");
         camera_status_flag = 3;
         delay_stop =  AP_HAL::millis();
     }
@@ -197,9 +197,10 @@ if(mode_change_to_redio == false || ap_mission->cmd_mode == 2){
                                     0);
         gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
         camera_status_flag = 0;
+        ap_mission->cmd_mode =0;
     }
     }
-    ap_mission->cmd_mode =0;
+
 }
 }
 #endif
