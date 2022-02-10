@@ -295,6 +295,8 @@ void AP_Camera::configure(float shooting_mode, float shutter_speed, float apertu
 
 void AP_Camera::control(float session, float zoom_pos, float zoom_step, float focus_lock, float shooting_cmd, float cmd_id)
 {
+    if(is_equal(shooting_cmd,10.0f) || is_equal(shooting_cmd,11.0f)){
+    }else{
     if(fist_mission_take_picture == false) {
         fist_mission_take_picture = true;
 
@@ -384,6 +386,7 @@ gcs().send_text(MAV_SEVERITY_INFO, "take photo");
 
     // send to all components
     GCS_MAVLINK::send_to_components(MAVLINK_MSG_ID_COMMAND_LONG, (char*)&mav_cmd_long, sizeof(mav_cmd_long));
+    }
 }
 
 /*

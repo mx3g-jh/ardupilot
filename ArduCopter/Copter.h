@@ -230,7 +230,7 @@ public:
     uint32_t delay_start = 0;
     uint32_t delay_stop = 0;
 private:
-
+    AP_Mission *ap_mission;
     // key aircraft parameters passed to multiple libraries
     AP_Vehicle::MultiCopter aparm;
 
