@@ -1602,7 +1602,6 @@ void GCS_MAVLINK::send_system_time()
 {
     uint64_t time_unix = 0;
     AP::rtc().get_utc_usec(time_unix); // may fail, leaving time_unix at 0
-
     mavlink_msg_system_time_send(
         chan,
         time_unix,
