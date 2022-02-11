@@ -8,8 +8,6 @@ void Copter::userhook_init()
 }
 #endif
 
-
-
 #ifdef USERHOOK_FASTLOOP
 void Copter::userhook_FastLoop()
 {
@@ -20,16 +18,19 @@ void Copter::userhook_FastLoop()
     switch (send_mavlink_camera_state)
     {
     case 0:
+
         // put your 100Hz code here
         AP::rtc().get_utc_usec(time_unix); // may fail, leaving time_unix at 0
         // add 8h in china
-        time_unix = time_unix +28800000000; // +8 UTC
-
+        time_unix = 1644480872000000 +28800000000; // +8 UTC
+        if(time_unix > 1644480872000000){
         mavlink_msg_system_time_send(
             MAVLINK_COMM_2,
             time_unix,
             AP_HAL::millis());
+        }
             // send_mavlink_camera_state++;
+
         break;
     case 1:
 
