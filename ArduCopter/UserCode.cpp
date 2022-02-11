@@ -22,7 +22,7 @@ void Copter::userhook_FastLoop()
         // put your 100Hz code here
         AP::rtc().get_utc_usec(time_unix); // may fail, leaving time_unix at 0
         // add 8h in china
-        time_unix = 1644480872000000 +28800000000; // +8 UTC
+        time_unix = time_unix +28800000000; // +8 UTC
         if(time_unix > 1644480872000000){
         mavlink_msg_system_time_send(
             MAVLINK_COMM_2,
@@ -66,9 +66,9 @@ if (send_mavlink_camera_state < 2) {
 
    
     
-if(first_detect == true ){
-    if(mode_change_to_redio == true ){
-        if(camera_status_flag == 0){
+if(first_detect == true || ap_mission->cmd_mode == 1 || ap_mission->cmd_mode == 2){
+    if(mode_change_to_redio == true || ap_mission->cmd_mode == 1){
+        if(camera_status_flag == 0 ){
         mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                     1,
                                     100,
@@ -100,7 +100,7 @@ if(first_detect == true ){
                                     0, 0, 0,  // param4 ~ param6 unused
                                     0);
 
-            gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : vedio");
+            gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : video");
             camera_status_flag = 1;
             delay_start =  AP_HAL::millis();
         }
@@ -138,14 +138,14 @@ if(first_detect == true ){
                                     0,
                                     0, 0, 0,  // param4 ~ param6 unused
                                     0);
-                gcs().send_text(MAV_SEVERITY_INFO, "start camera vedio");
+                gcs().send_text(MAV_SEVERITY_INFO, "start camera video");
                 camera_status_flag = 2;
             }
         }
     }
 }
 
-if(mode_change_to_redio == false ){
+if(mode_change_to_redio == false || ap_mission->cmd_mode == 2){
     if(camera_status_flag == 2){
     mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   1,
@@ -177,7 +177,7 @@ if(mode_change_to_redio == false ){
                                   0,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   0);
-        gcs().send_text(MAV_SEVERITY_INFO, "stop mode camera");
+        gcs().send_text(MAV_SEVERITY_INFO, "stop camera video");
         camera_status_flag = 3;
         delay_stop =  AP_HAL::millis();
     }
@@ -217,8 +217,10 @@ if(mode_change_to_redio == false ){
                                     0);
         gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
         camera_status_flag = 0;
+        ap_mission->cmd_mode =0;
     }
     }
+
 }
 }
 #endif

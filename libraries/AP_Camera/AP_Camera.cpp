@@ -295,8 +295,7 @@ void AP_Camera::configure(float shooting_mode, float shutter_speed, float apertu
 
 void AP_Camera::control(float session, float zoom_pos, float zoom_step, float focus_lock, float shooting_cmd, float cmd_id)
 {
-    if(is_equal(shooting_cmd,1.0f) || is_equal(shooting_cmd,2.0f) || is_equal(shooting_cmd,3.0f)) {
-    if(fist_mission_take_picture == false) {
+   if(fist_mission_take_picture == false) {
         fist_mission_take_picture = true;
 
         mavlink_msg_command_long_send(MAVLINK_COMM_0,
@@ -332,101 +331,6 @@ void AP_Camera::control(float session, float zoom_pos, float zoom_step, float fo
                                 0, 0, 0,  // param4 ~ param6 unused
                                 0);
         gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
-    }
-    } else if(is_equal(shooting_cmd,10.0f)){
-        mavlink_msg_command_long_send(MAVLINK_COMM_0,
-                                1,
-                                100,
-                                MAV_CMD_SET_CAMERA_MODE,
-                                0,        // confirmation of zero means this is the first time this message has been sent
-                                0,
-                                1,
-                                0,
-                                0, 0, 0,  // param4 ~ param6 unused
-                                0);
-
-        mavlink_msg_command_long_send(MAVLINK_COMM_1,
-                                1,
-                                100,
-                                MAV_CMD_SET_CAMERA_MODE,
-                                0,        // confirmation of zero means this is the first time this message has been sent
-                                0,
-                                1,
-                                0,
-                                0, 0, 0,  // param4 ~ param6 unused
-                                0);
-
-        mavlink_msg_command_long_send(MAVLINK_COMM_2,
-                                1,
-                                100,
-                                MAV_CMD_SET_CAMERA_MODE,
-                                0,        // confirmation of zero means this is the first time this message has been sent
-                                0,
-                                1,
-                                0,
-                                0, 0, 0,  // param4 ~ param6 unused
-                                0);
-        gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take video");
-        mavlink_msg_command_long_send(MAVLINK_COMM_0,
-                                1,
-                                100,
-                                MAV_CMD_VIDEO_START_CAPTURE,
-                                0,        // confirmation of zero means this is the first time this message has been sent
-                                0,
-                                0,
-                                0,
-                                0, 0, 0,  // param4 ~ param6 unused
-                                0);
-
-        mavlink_msg_command_long_send(MAVLINK_COMM_1,
-                                1,
-                                100,
-                                MAV_CMD_VIDEO_START_CAPTURE,
-                                0,        // confirmation of zero means this is the first time this message has been sent
-                                0,
-                                0,
-                                0,
-                                0, 0, 0,  // param4 ~ param6 unused
-                                0);
-
-        mavlink_msg_command_long_send(MAVLINK_COMM_2,
-                                1,
-                                100,
-                                MAV_CMD_VIDEO_START_CAPTURE,
-                                0,        // confirmation of zero means this is the first time this message has been sent
-                                0,
-                                0,
-                                0,
-                                0, 0, 0,  // param4 ~ param6 unused
-                                0);
-
-    gcs().send_text(MAV_SEVERITY_INFO, "start camera video");
-    return;
-
-    } else if(is_equal(shooting_cmd,11.0f)){
-        mavlink_msg_command_long_send(MAVLINK_COMM_2,
-                                  1,
-                                  100,
-                                  MAV_CMD_VIDEO_STOP_CAPTURE,
-                                  0,        // confirmation of zero means this is the first time this message has been sent
-                                  0,
-                                  0,
-                                  0,
-                                  0, 0, 0,  // param4 ~ param6 unused
-                                  0);
-        gcs().send_text(MAV_SEVERITY_INFO, "stop camera video");
-        mavlink_msg_command_long_send(MAVLINK_COMM_2,
-                                  1,
-                                  100,
-                                  MAV_CMD_SET_CAMERA_MODE,
-                                  0,        // confirmation of zero means this is the first time this message has been sent
-                                  0,
-                                  0,
-                                  0,
-                                  0, 0, 0,  // param4 ~ param6 unused
-                                  0);
-        gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
-
     }
 
 mavlink_msg_command_long_send(MAVLINK_COMM_0,
