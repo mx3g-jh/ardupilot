@@ -230,7 +230,7 @@ public:
     uint8_t first_mode;
     bool first_detect = false;
 private:
-
+    AP_Mission *ap_mission;
     // key aircraft parameters passed to multiple libraries
     AP_Vehicle::MultiCopter aparm;
 
