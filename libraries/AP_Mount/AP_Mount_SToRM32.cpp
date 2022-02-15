@@ -155,15 +155,20 @@ void AP_Mount_SToRM32::send_do_mount_control(float pitch_deg, float roll_deg, fl
                                   _compid,
                                   MAV_CMD_DO_MOUNT_CONTROL,
                                   0,        // confirmation of zero means this is the first time this message has been sent
-                                  pitch_deg,
+                                pitch_deg,
                                   roll_deg,
-                                  yaw_deg,
+                                  pitch_deg,
                                   0, 0, 0,  // param4 ~ param6 unused
                                   mount_mode);
 
-        // gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_caculate,(int)pitch_deg,(int)yaw_caculate);
-
+        // gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_deg,(int)roll_deg,(int)yaw_deg);
+        uint32_t ttt = AP_HAL::millis();
+    if(ttt - _time_send > 1000){
+        gcs().send_text(MAV_SEVERITY_INFO, "titl gimbal %d | %d | %d | (%d) (%d) (%d)", _chan,_sysid,_compid,(int)pitch_deg,(int)roll_deg,(int)yaw_deg);
+        _time_send = ttt;
+    } 
     // store time of send
     _last_send = AP_HAL::millis();
+
 }
 #endif // HAL_MOUNT_ENABLED

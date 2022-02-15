@@ -64,10 +64,8 @@ if (send_mavlink_camera_state < 2) {
     send_mavlink_camera_state = 0;
 }
 
-   
-    
-if(first_detect == true || ap_mission->cmd_mode == 1 || ap_mission->cmd_mode == 2){
-    if(mode_change_to_redio == true || ap_mission->cmd_mode == 1){
+if(first_detect == true || ap_mission->get_cmd_mode() == 1 || ap_mission->get_cmd_mode() == 2){
+    if(mode_change_to_redio == true || ap_mission->get_cmd_mode() == 1){
         if(camera_status_flag == 0 ){
         mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                     1,
@@ -145,7 +143,7 @@ if(first_detect == true || ap_mission->cmd_mode == 1 || ap_mission->cmd_mode == 
     }
 }
 
-if(mode_change_to_redio == false || ap_mission->cmd_mode == 2){
+if(mode_change_to_redio == false || ap_mission->get_cmd_mode() == 2){
     if(camera_status_flag == 2){
     mavlink_msg_command_long_send(MAVLINK_COMM_0,
                                   1,
@@ -217,7 +215,7 @@ if(mode_change_to_redio == false || ap_mission->cmd_mode == 2){
                                     0);
         gcs().send_text(MAV_SEVERITY_INFO, "set camera mode : take photo");
         camera_status_flag = 0;
-        ap_mission->cmd_mode =0;
+        ap_mission->set_cmd_mode(0);
     }
     }
 

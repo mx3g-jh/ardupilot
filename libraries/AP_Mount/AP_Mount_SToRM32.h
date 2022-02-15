@@ -50,5 +50,6 @@ private:
     uint8_t _compid;                // component id of gimbal
     mavlink_channel_t _chan;        // mavlink channel used to communicate with gimbal.  Currently hard-coded to Telem2
     uint32_t _last_send;            // system time of last do_mount_control sent to gimbal
+    uint32_t _time_send = 0;
 };
 #endif // HAL_MOUNT_ENABLED

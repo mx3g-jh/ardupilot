@@ -590,8 +590,8 @@ public:
     // allow lua to get/set any WP items in any order in a mavlink-ish kinda way.
     bool get_item(uint16_t index, mavlink_mission_item_int_t& result) const ;
     bool set_item(uint16_t index, mavlink_mission_item_int_t& source) ;
-    uint8_t cmd_mode = 0;
-
+    uint8_t get_cmd_mode() const { return cmd_mode; };
+    void set_cmd_mode(uint8_t cmd)  {  cmd_mode = cmd; };
 private:
     static AP_Mission *_singleton;
 
@@ -706,7 +706,7 @@ private:
 
     // last time that mission changed
     uint32_t _last_change_time_ms;
-
+    uint8_t cmd_mode = 0;
 
     // multi-thread support. This is static so it can be used from
     // const functions

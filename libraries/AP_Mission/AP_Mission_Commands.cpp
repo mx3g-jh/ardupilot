@@ -109,13 +109,13 @@ bool AP_Mission::start_command_camera(const AP_Mission::Mission_Command& cmd)
 
     case MAV_CMD_DO_DIGICAM_CONTROL:                    // Mission command to control an on-board camera controller system. |Session control e.g. show/hide lens| Zoom's absolute position| Zooming step value to offset zoom from the current position| Focus Locking, Unlocking or Re-locking| Shooting Command| Command Identity| Empty|
         if( cmd.content.digicam_control.shooting_cmd == 10){
-            cmd_mode = 1;
+            set_cmd_mode(1);
             gcs().send_text(MAV_SEVERITY_INFO, "set cmd_mode 1 :start mission video");
         }else if(cmd.content.digicam_control.shooting_cmd == 11){
-            cmd_mode = 2;
+            set_cmd_mode(2);
             gcs().send_text(MAV_SEVERITY_INFO, "set cmd_mode 2 : stop mission video");
         }else{
-            cmd_mode = 0;
+             set_cmd_mode(0);
         camera->control(
             cmd.content.digicam_control.session,
             cmd.content.digicam_control.zoom_pos,
