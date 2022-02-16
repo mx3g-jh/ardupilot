@@ -131,6 +131,7 @@ private:
     float yaw_dig = 0.0f;
     float pitch_pecent = 0.0f;
     float yaw_pecent = 0.0f;
+    uint32_t _time_send = 0;
     void rate_input_rad(float &out, const RC_Channel *ch, float min, float max) const;
 };
 

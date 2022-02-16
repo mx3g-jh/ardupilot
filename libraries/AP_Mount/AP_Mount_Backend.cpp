@@ -1,7 +1,8 @@
 #include "AP_Mount_Backend.h"
 #if HAL_MOUNT_ENABLED
 #include <AP_AHRS/AP_AHRS.h>
-
+#include <AP_HAL/AP_HAL.h>
+#include <GCS_MAVLink/GCS.h>
 extern const AP_HAL::HAL& hal;
 
 // set_angle_targets - sets angle targets in degrees
@@ -122,23 +123,28 @@ float AP_Mount_Backend::caculate_pitch_angle(float pitch_deg)
 
 float AP_Mount_Backend::caculate_yaw_angle(float yaw_deg)
 {
+    // uint32_t aaa = AP_HAL::millis();
+    //     if(aaa- _time_send > 600){
+    //     gcs().send_text(MAV_SEVERITY_INFO, "%f | %f", (double)yaw_deg,(double)(PUS_STEP*yaw_pecent));
+    //     _time_send =aaa;
+    //     }
     yaw_pecent = 0.008*abs(yaw_deg);
 
-    if(yaw_deg <= -15.0f && yaw_deg >= -90.0f)
+    if(yaw_deg <= -15.0f && yaw_deg >= -180.0f)
     {
+
         yaw_dig -= PUS_STEP*yaw_pecent;
-        if(yaw_dig <= -90.0f)yaw_dig = -90.0f;
-        last_yaw_channel = yaw_deg;
-    }else if(yaw_deg > -15.0f && yaw_deg < 15.0f)
+        if(yaw_dig <= -180.0f)yaw_dig = -180.0f;
+        last_yaw_channel = yaw_dig;
+    }else if(yaw_deg > -15.0f && yaw_deg <15.0f)
     {
         last_yaw_channel = yaw_dig;
-    }else if(yaw_deg >= 15.0f && yaw_deg <= 90.0f)
+    }else if(yaw_deg >= 15.0f && yaw_deg <= 180.0f)
     {
         yaw_dig += PUS_STEP*yaw_pecent;
-        if(yaw_dig >= 90.0f)yaw_dig = 90.0f;
+        if(yaw_dig >= 180.0f)yaw_dig =180.0f;
         last_yaw_channel = yaw_dig;
     }
-
     return last_yaw_channel;
 }
 
