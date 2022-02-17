@@ -115,7 +115,7 @@ bool AP_Mission::start_command_camera(const AP_Mission::Mission_Command& cmd)
             set_cmd_mode(2);
             gcs().send_text(MAV_SEVERITY_INFO, "set cmd_mode 2 : stop mission video");
         }else{
-             set_cmd_mode(0);
+            set_cmd_mode(0);
         camera->control(
             cmd.content.digicam_control.session,
             cmd.content.digicam_control.zoom_pos,

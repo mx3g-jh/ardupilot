@@ -228,6 +228,7 @@ public:
     uint32_t delay_stop = 0;
     bool first_come_in = false;
     uint8_t first_mode;
+    bool cmd_change = false;
     bool first_detect = false;
 private:
     // AP_Mission *ap_mission;
