@@ -1280,6 +1280,9 @@ void ModeAuto::do_loiter_unlimited(const AP_Mission::Mission_Command& cmd)
 
     // start way point navigator and provide it the desired location
     wp_start(target_loc);
+    if (auto_yaw.mode() != AUTO_YAW_ROI) {
+        auto_yaw.set_mode_to_cmd();     //set AUTO_YAW_HOLD
+    }
 }
 
 // do_circle - initiate moving in a circle

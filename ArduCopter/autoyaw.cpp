@@ -23,6 +23,10 @@ void Mode::AutoYaw::set_mode_to_default(bool rtl)
 {
     set_mode(default_mode(rtl));
 }
+void Mode::AutoYaw::set_mode_to_cmd()
+{
+    set_mode(AUTO_YAW_HOLD);
+}
 
 // default_mode - returns auto_yaw.mode() based on WP_YAW_BEHAVIOR parameter
 // set rtl parameter to true if this is during an RTL

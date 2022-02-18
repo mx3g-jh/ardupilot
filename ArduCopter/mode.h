@@ -195,6 +195,7 @@ public:
         // mode(): current method of determining desired yaw:
         autopilot_yaw_mode mode() const { return (autopilot_yaw_mode)_mode; }
         void set_mode_to_default(bool rtl);
+        void set_mode_to_cmd();
         void set_mode(autopilot_yaw_mode new_mode);
         autopilot_yaw_mode default_mode(bool rtl) const;
 
