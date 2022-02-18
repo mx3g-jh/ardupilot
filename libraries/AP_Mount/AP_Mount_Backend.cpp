@@ -146,6 +146,17 @@ float AP_Mount_Backend::caculate_yaw_angle(float yaw_deg)
         last_yaw_channel = yaw_dig;
     }
     return last_yaw_channel;
+    //     if(yaw_deg <= -15.0f && yaw_deg >= -180.0f)
+    // {
+    //    last_yaw_channel =  -180.0f;
+    // } else if(yaw_deg >= 15.0f && yaw_deg <= 180.0f)
+    // {
+    //     last_yaw_channel =  180.0f;
+    // }else if(yaw_deg > -15.0f && yaw_deg <15.0f)
+    // {
+    //   last_yaw_channel =  0.0f;
+    // }
+    //  return last_yaw_channel;
 }
 
 void AP_Mount_Backend::rate_input_rad(float &out, const RC_Channel *chan, float min, float max) const
