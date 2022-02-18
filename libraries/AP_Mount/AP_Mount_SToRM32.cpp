@@ -47,6 +47,7 @@ void AP_Mount_SToRM32::update()
         case MAV_MOUNT_MODE_MAVLINK_TARGETING:
             // do nothing because earth-frame angle targets (i.e. _angle_ef_target_rad) should have already been set by a MOUNT_CONTROL message from GCS
             resend_now = true;
+            cmd_control = true;
             break;
 
         // RC radio manual angle control, but with stabilization from the AHRS
@@ -85,10 +86,24 @@ void AP_Mount_SToRM32::update()
             // we do not know this mode so do nothing
             break;
     }
-
-    // resend target angles at least once per second
-    if (resend_now || ((AP_HAL::millis() - _last_send) > AP_MOUNT_STORM32_RESEND_MS)) {
-        send_do_mount_control(ToDeg(_angle_ef_target_rad.y), ToDeg(_angle_ef_target_rad.x), ToDeg(_angle_ef_target_rad.z), MAV_MOUNT_MODE_MAVLINK_TARGETING);
+    if(cmd_control == true){
+         if ( (AP_HAL::millis() - _last_send) > AP_MOUNT_STORM32_CMD_RESEND_MS) {
+            if(once_get == false){
+                gimbal_yaw = _angle_ef_target_rad.z;
+                once_get = true;
+            }
+            send_gimbal_yaw = send_gimbal_yaw*0.9 + gimbal_yaw*0.1;
+            if(abs(abs(send_gimbal_yaw) - abs(gimbal_yaw)) < 0.087f){
+                once_get = false;
+                cmd_control = false;
+            }
+            send_do_mount_control(ToDeg(_angle_ef_target_rad.y), ToDeg(_angle_ef_target_rad.x), ToDeg(send_gimbal_yaw), MAV_MOUNT_MODE_MAVLINK_TARGETING);
+        }
+    }else{
+        // resend target angles at least once per second
+        if (resend_now || ((AP_HAL::millis() - _last_send) > AP_MOUNT_STORM32_RESEND_MS)) {
+            send_do_mount_control(ToDeg(_angle_ef_target_rad.y), ToDeg(_angle_ef_target_rad.x), ToDeg(_angle_ef_target_rad.z), MAV_MOUNT_MODE_MAVLINK_TARGETING);
+        }
     }
 }
 

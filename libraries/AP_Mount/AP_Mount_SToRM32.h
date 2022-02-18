@@ -13,6 +13,7 @@
 #if HAL_MOUNT_ENABLED
 
 #define AP_MOUNT_STORM32_RESEND_MS  1000    // resend angle targets to gimbal once per second
+#define AP_MOUNT_STORM32_CMD_RESEND_MS  200    // resend angle targets to gimbal once per second
 #define AP_MOUNT_STORM32_SEARCH_MS  600000   // search for gimbal for 1 minute after startup
 class AP_Mount_SToRM32 : public AP_Mount_Backend
 {
@@ -51,5 +52,10 @@ private:
     mavlink_channel_t _chan;        // mavlink channel used to communicate with gimbal.  Currently hard-coded to Telem2
     uint32_t _last_send;            // system time of last do_mount_control sent to gimbal
     uint32_t _time_send = 0;
+    bool    cmd_control = false;
+    bool    once_get = false;
+    float gimbal_yaw = 0.0f;
+    float send_gimbal_yaw = 0.0f;
+    float gimbal_yaw_conf = 0.0f;
 };
 #endif // HAL_MOUNT_ENABLED
