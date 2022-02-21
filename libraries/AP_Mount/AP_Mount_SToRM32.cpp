@@ -94,7 +94,7 @@ void AP_Mount_SToRM32::update()
                 send_gimbal_yaw = _angle_ef_target_rad.z;
                 is_close = true;
             }else{
-                send_gimbal_yaw = send_gimbal_yaw*0.9 +  (_angle_ef_target_rad.z)*0.1;
+                send_gimbal_yaw = send_gimbal_yaw*0.9f +  (_angle_ef_target_rad.z)*0.1f;
                 is_close = false;
             }
             if(!is_close){
