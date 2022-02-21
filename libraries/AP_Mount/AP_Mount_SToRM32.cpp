@@ -97,15 +97,17 @@ void AP_Mount_SToRM32::update()
                 send_gimbal_yaw = send_gimbal_yaw*0.9 +  (_angle_ef_target_rad.z)*0.1;
                 is_close = false;
             }
-            if(is_close && send_once == false){
+            if(!is_close){
                 send_do_mount_control(ToDeg(_angle_ef_target_rad.y), ToDeg(_angle_ef_target_rad.x), ToDeg(send_gimbal_yaw), MAV_MOUNT_MODE_MAVLINK_TARGETING);
-                send_once = true;
-            }else if(!is_close){
-                send_do_mount_control(ToDeg(_angle_ef_target_rad.y), ToDeg(_angle_ef_target_rad.x), ToDeg(send_gimbal_yaw), MAV_MOUNT_MODE_MAVLINK_TARGETING);
-                send_once = false;
+            }
+        }
+        if(is_close){
+            if ( (AP_HAL::millis() - _last_send) > AP_MOUNT_STORM32_RESEND_MS) {
+                send_do_mount_control(ToDeg(_angle_ef_target_rad.y), ToDeg(_angle_ef_target_rad.x), ToDeg(_angle_ef_target_rad.z), MAV_MOUNT_MODE_MAVLINK_TARGETING);
             }
         }
     }else{
+        send_gimbal_yaw = 0.0f;
         // resend target angles at least once per second
         if (resend_now || ((AP_HAL::millis() - _last_send) > AP_MOUNT_STORM32_RESEND_MS)) {
             send_do_mount_control(ToDeg(_angle_ef_target_rad.y), ToDeg(_angle_ef_target_rad.x), ToDeg(_angle_ef_target_rad.z), MAV_MOUNT_MODE_MAVLINK_TARGETING);
