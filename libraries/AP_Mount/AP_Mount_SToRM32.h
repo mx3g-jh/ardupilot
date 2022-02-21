@@ -54,8 +54,6 @@ private:
     uint32_t _time_send = 0;
     bool    cmd_control = false;
     bool    once_get = false;
-    float gimbal_yaw = 0.0f;
     float send_gimbal_yaw = 0.0f;
-    float gimbal_yaw_conf = 0.0f;
 };
 #endif // HAL_MOUNT_ENABLED
