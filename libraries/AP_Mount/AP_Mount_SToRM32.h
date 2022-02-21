@@ -56,5 +56,6 @@ private:
     bool    once_get = false;
     float   send_gimbal_yaw = 0.0f;
     bool    is_close = false;
+    bool   send_once = false;
 };
 #endif // HAL_MOUNT_ENABLED
