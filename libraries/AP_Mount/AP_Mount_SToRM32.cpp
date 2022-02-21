@@ -88,12 +88,15 @@ void AP_Mount_SToRM32::update()
             break;
     }
     if(cmd_control == true){
+         if ( (AP_HAL::millis() - _last_send) > (is_close ? AP_MOUNT_STORM32_RESEND_MS : AP_MOUNT_STORM32_CMD_RESEND_MS)) {
+
             if(abs(abs(send_gimbal_yaw) - abs(_angle_ef_target_rad.z)) < 0.5f){
                 send_gimbal_yaw = _angle_ef_target_rad.z;
+                is_close = true;
             }else{
-                 send_gimbal_yaw = send_gimbal_yaw*0.9 +  (_angle_ef_target_rad.z)*0.1;
+                send_gimbal_yaw = send_gimbal_yaw*0.9 +  (_angle_ef_target_rad.z)*0.1;
+                is_close = false;
             }
-         if ( (AP_HAL::millis() - _last_send) > AP_MOUNT_STORM32_RESEND_MS) {
             send_do_mount_control(ToDeg(_angle_ef_target_rad.y), ToDeg(_angle_ef_target_rad.x), ToDeg(send_gimbal_yaw), MAV_MOUNT_MODE_MAVLINK_TARGETING);
         }
     }else{
